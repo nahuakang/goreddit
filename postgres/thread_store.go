@@ -25,7 +25,7 @@ func (s *ThreadStore) Thread(id uuid.UUID) (goreddit.Thread, error) {
 // Threads method gets all the threads in the database
 func (s *ThreadStore) Threads() ([]goreddit.Thread, error) {
 	var tt []goreddit.Thread
-	if err := s.Select(&tt, `SELCT * FROM threads`); err != nil {
+	if err := s.Select(&tt, `SELECT * FROM threads`); err != nil {
 		return []goreddit.Thread{}, fmt.Errorf("Error getting threads: %w", err)
 	}
 	return tt, nil
