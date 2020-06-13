@@ -8,13 +8,6 @@ import (
 	"github.com/nahuakang/goreddit"
 )
 
-// NewPostStore initializes a PostStore pointer
-func NewPostStore(db *sqlx.DB) *PostStore {
-	return &PostStore{
-		DB: db,
-	}
-}
-
 // PostStore inherits from sqlx.DB
 type PostStore struct {
 	*sqlx.DB

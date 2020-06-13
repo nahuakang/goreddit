@@ -8,13 +8,6 @@ import (
 	"github.com/nahuakang/goreddit"
 )
 
-// NewThreadStore returns a pointer to a postgres.ThreadStore struct
-func NewThreadStore(db *sqlx.DB) *ThreadStore {
-	return &ThreadStore{
-		DB: db,
-	}
-}
-
 // ThreadStore inherits methods from sqlx.DB
 type ThreadStore struct {
 	*sqlx.DB

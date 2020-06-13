@@ -8,13 +8,6 @@ import (
 	"github.com/nahuakang/goreddit"
 )
 
-// NewCommentStore initializes a CommentStore pointer
-func NewCommentStore(db *sqlx.DB) *CommentStore {
-	return &CommentStore{
-		DB: db,
-	}
-}
-
 // CommentStore inherits sqlx.DB
 type CommentStore struct {
 	*sqlx.DB
