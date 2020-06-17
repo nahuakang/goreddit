@@ -25,6 +25,30 @@ func NewHandler(store goreddit.Store) *Handler {
 		r.Post("/{id}/delete", h.ThreadsDelete())
 	})
 
+	h.Get("/html", func(w http.ResponseWriter, r *http.Request) {
+		t := template.Must(template.ParseFiles("templates/layout.html"))
+
+		type params struct {
+			Title   string
+			Text    string
+			Lines   []string
+			Number1 int
+			Number2 int
+		}
+
+		t.Execute(w, params{
+			Title: "Reddit Clone",
+			Text:  "Welcome to our Reddit clone.",
+			Lines: []string{
+				"Line1",
+				"Line2",
+				"Line3",
+			},
+			Number1: 2,
+			Number2: 2,
+		})
+	})
+
 	return h
 }
 
