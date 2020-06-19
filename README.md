@@ -8,3 +8,17 @@ $ make postgres
 $ make adminer
 $ reflex -s go run cmd/goreddit/main.go
 ```
+
+Login to adminer at `localhost:8080` and type in the following details:
+```sh
+System:   PostgreSQL
+Server:   localhost
+Username: postgres
+Password: secret
+Database: postgres
+```
+
+After logging into Adminer, run in the terminal the following command:
+```sh
+$ make migrate
+```
