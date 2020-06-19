@@ -35,29 +35,13 @@ type Handler struct {
 	store goreddit.Store
 }
 
-const threadsListHTML = `
-<h1>Threads</h1>
-<dl>
-{{range .Threads}}
-	<dt><strong>{{.Title}}</strong></dt>
-	<dd>{{.Description}}</dd>
-	<dd>
-		<form action="/threads/{{.ID}}/delete" method="POST">
-			<button type="submit">Delete</button>
-		</form>
-	</dd>
-{{end}}
-</dl>
-<a href="/threads/new">Create thread</a>
-`
-
 // ThreadsList returns a webpage with the list of all Threads
 func (h *Handler) ThreadsList() http.HandlerFunc {
 	type data struct {
 		Threads []goreddit.Thread
 	}
 
-	tmpl := template.Must(template.New("").Parse(threadsListHTML))
+	tmpl := template.Must(template.ParseFiles("templates/layout.html", "templates/threads.html"))
 	return func(w http.ResponseWriter, r *http.Request) {
 		tt, err := h.store.Threads()
 		if err != nil {
@@ -69,26 +53,9 @@ func (h *Handler) ThreadsList() http.HandlerFunc {
 	}
 }
 
-const threadCreateHTML = `
-<h1>New Thread</h1>
-<form action="/threads" method="POST">
-	<table>
-		<tr>
-			<td>Title</td>
-			<td><input type="text" name="title" /></td>
-		</tr>
-		<tr>
-			<td>Description</td>
-			<td><input type="text" name="description" /></td>
-		</tr>
-	</table>
-	<button type="submit">Create thread</button>
-</form>
-`
-
 // ThreadsCreate leads to the page for creating new threads
 func (h *Handler) ThreadsCreate() http.HandlerFunc {
-	tmpl := template.Must(template.New("").Parse(threadCreateHTML))
+	tmpl := template.Must(template.ParseFiles("templates/layout.html", "templates/thread_create.html"))
 	return func(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, nil)
 	}
