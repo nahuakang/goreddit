@@ -209,8 +209,9 @@ func (h *Handler) PostsStore() http.HandlerFunc {
 // PostsShow leads to the page for creating new post
 func (h *Handler) PostsShow() http.HandlerFunc {
 	type data struct {
-		Thread goreddit.Thread
-		Post   goreddit.Post
+		Thread   goreddit.Thread
+		Post     goreddit.Post
+		Comments []goreddit.Comment
 	}
 	tmpl := template.Must(template.ParseFiles("templates/layout.html", "templates/post.html"))
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -234,11 +235,16 @@ func (h *Handler) PostsShow() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
+		cc, err := h.store.CommentsByPost(p.ID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
 		t, err := h.store.Thread(threadID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
-		tmpl.Execute(w, data{Thread: t, Post: p})
+		tmpl.Execute(w, data{Thread: t, Post: p, Comments: cc})
 	}
 }
