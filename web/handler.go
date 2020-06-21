@@ -28,6 +28,7 @@ func NewHandler(store goreddit.Store) *Handler {
 		r.Get("/{id}/new", h.PostsCreate())
 		r.Post("/{id}", h.PostsStore())
 		r.Get("/{threadID}/{postID}", h.PostsShow())
+		r.Post("/{threadID}/{postID}", h.CommentsStore())
 	})
 
 	return h
@@ -246,5 +247,31 @@ func (h *Handler) PostsShow() http.HandlerFunc {
 		}
 
 		tmpl.Execute(w, data{Thread: t, Post: p, Comments: cc})
+	}
+}
+
+// CommentsStore saves the newly created comments of a post to database
+func (h *Handler) CommentsStore() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		content := r.FormValue("content")
+
+		idStr := chi.URLParam(r, "postID")
+
+		id, err := uuid.Parse(idStr)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		if err := h.store.CreateComment(&goreddit.Comment{
+			ID:      uuid.New(),
+			PostID:  id,
+			Content: content,
+		}); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, r.Referer(), http.StatusFound)
 	}
 }
