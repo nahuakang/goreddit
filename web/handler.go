@@ -30,6 +30,7 @@ func NewHandler(store goreddit.Store) *Handler {
 		r.Get("/{threadID}/{postID}", h.PostsShow())
 		r.Post("/{threadID}/{postID}", h.CommentsStore())
 	})
+	h.Get("/comments/{id}/vote", h.CommentsVote())
 
 	return h
 }
@@ -268,6 +269,39 @@ func (h *Handler) CommentsStore() http.HandlerFunc {
 			PostID:  id,
 			Content: content,
 		}); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, r.Referer(), http.StatusFound)
+	}
+}
+
+// CommentsVote stores information about votes on a comment
+func (h *Handler) CommentsVote() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		idStr := chi.URLParam(r, "id")
+
+		id, err := uuid.Parse(idStr)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		c, err := h.store.Comment(id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		dir := r.URL.Query().Get("dir")
+		if dir == "up" {
+			c.Votes++
+		} else if dir == "down" {
+			c.Votes--
+		}
+
+		if err := h.store.UpdateComment(&c); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
