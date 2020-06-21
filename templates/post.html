@@ -32,9 +32,9 @@
     {{range .Comments}}
     <div class="d-flex my-4">
         <div class="text-center flex-shrink-0" style="width: 1.5rem">
-            <a href="#" class="d-block text-body text-decoration-none">&#x25B2</a>
+            <a href="/comments/{{.ID}}/votes?dir=up" class="d-block text-body text-decoration-none">&#x25B2</a>
             <div>{{.Votes}}</div>
-            <a href="#" class="d-block text-body text-decoration-none">&#x25BC</a>
+            <a href="/comments/{{.ID}}/votes?dir=down" class="d-block text-body text-decoration-none">&#x25BC</a>
         </div>
         <div class="pl-4">
             <p class="card-text" style="white-space: pre-line">{{.Content}}</p>
