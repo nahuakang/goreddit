@@ -11,11 +11,12 @@ type Thread struct {
 
 // Post is the basic struct for a post
 type Post struct {
-	ID       uuid.UUID `db:"id"`
-	ThreadID uuid.UUID `db:"thread_id"`
-	Title    string    `db:"title"`
-	Content  string    `db:"content"`
-	Votes    int       `db:"votes"`
+	ID            uuid.UUID `db:"id"`
+	ThreadID      uuid.UUID `db:"thread_id"`
+	Title         string    `db:"title"`
+	Content       string    `db:"content"`
+	Votes         int       `db:"votes"`
+	CommentsCount int       `db:"comments_count"`
 }
 
 // Comment is the basic struct for a comment

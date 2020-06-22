@@ -25,7 +25,16 @@ func (s *PostStore) Post(id uuid.UUID) (goreddit.Post, error) {
 // PostsByThread gets all the posts from the database based on the thread id
 func (s *PostStore) PostsByThread(threadID uuid.UUID) ([]goreddit.Post, error) {
 	var pp []goreddit.Post
-	if err := s.Select(&pp, `SELECT * FROM posts WHERE thread_id = $1 ORDER BY votes DESC`, threadID); err != nil {
+	var query = `
+			SELECT
+				posts.*,
+				COUNT(comments.*) AS comments_count
+			FROM posts
+			LEFT JOIN comments ON comments.post_id = posts.id
+			WHERE thread_id = $1
+			GROUP BY posts.id
+			ORDER BY votes DESC`
+	if err := s.Select(&pp, query, threadID); err != nil {
 		return []goreddit.Post{}, fmt.Errorf("Error getting posts: %w", err)
 	}
 	return pp, nil
