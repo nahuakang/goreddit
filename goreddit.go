@@ -17,6 +17,7 @@ type Post struct {
 	Content       string    `db:"content"`
 	Votes         int       `db:"votes"`
 	CommentsCount int       `db:"comments_count"`
+	ThreadTitle   string    `db:"thread_title"`
 }
 
 // Comment is the basic struct for a comment
@@ -39,6 +40,7 @@ type ThreadStore interface {
 // PostStore is the basic interface for postgres.ostStore
 type PostStore interface {
 	Post(id uuid.UUID) (Post, error)
+	Posts() ([]Post, error)
 	PostsByThread(threadID uuid.UUID) ([]Post, error)
 	CreatePost(p *Post) error
 	UpdatePost(p *Post) error
