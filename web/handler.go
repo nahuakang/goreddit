@@ -28,6 +28,7 @@ func NewHandler(store goreddit.Store) *Handler {
 		r.Get("/{id}/new", h.PostsCreate())
 		r.Post("/{id}", h.PostsStore())
 		r.Get("/{threadID}/{postID}", h.PostsShow())
+		r.Get("/{threadID}/{postID}/vote", h.PostsVote())
 		r.Post("/{threadID}/{postID}", h.CommentsStore())
 	})
 	h.Get("/comments/{id}/vote", h.CommentsVote())
@@ -269,6 +270,39 @@ func (h *Handler) CommentsStore() http.HandlerFunc {
 			PostID:  id,
 			Content: content,
 		}); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, r.Referer(), http.StatusFound)
+	}
+}
+
+// PostsVote stores information about votes on a post
+func (h *Handler) PostsVote() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		idStr := chi.URLParam(r, "postID")
+
+		id, err := uuid.Parse(idStr)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		p, err := h.store.Post(id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		dir := r.URL.Query().Get("dir")
+		if dir == "up" {
+			p.Votes++
+		} else if dir == "down" {
+			p.Votes--
+		}
+
+		if err := h.store.UpdatePost(&p); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
