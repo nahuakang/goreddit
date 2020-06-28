@@ -5,8 +5,8 @@ go 1.14
 require (
 	4d63.com/gochecknoinits v0.0.0-20200108094044-eb73b47b9fc4 // indirect
 	github.com/alecthomas/gocyclo v0.0.0-20150208221726-aa8f8b160214 // indirect
-	github.com/alexedwards/scs/postgresstore v0.0.0-20200528164450-40c2a5f7eae8 // indirect
-	github.com/alexedwards/scs/v2 v2.3.1 // indirect
+	github.com/alexedwards/scs/postgresstore v0.0.0-20200528164450-40c2a5f7eae8
+	github.com/alexedwards/scs/v2 v2.3.1
 	github.com/alexkohler/nakedret v1.0.0 // indirect
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/google/uuid v1.1.1
