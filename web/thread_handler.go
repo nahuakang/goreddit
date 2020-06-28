@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 	"github.com/gorilla/csrf"
@@ -12,7 +13,8 @@ import (
 
 // ThreadHandler handles threads
 type ThreadHandler struct {
-	store goreddit.Store
+	store    goreddit.Store
+	sessions *scs.SessionManager
 }
 
 // List returns a webpage with the list of all Threads

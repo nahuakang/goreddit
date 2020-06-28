@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 	"github.com/gorilla/csrf"
@@ -12,7 +13,8 @@ import (
 
 // PostHandler handles posts
 type PostHandler struct {
-	store goreddit.Store
+	store    goreddit.Store
+	sessions *scs.SessionManager
 }
 
 // Create leads to the page for creating new post

@@ -3,6 +3,7 @@ package web
 import (
 	"net/http"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 	"github.com/nahuakang/goreddit"
@@ -10,7 +11,8 @@ import (
 
 // CommentHandler handles comments
 type CommentHandler struct {
-	store goreddit.Store
+	store    goreddit.Store
+	sessions *scs.SessionManager
 }
 
 // Store saves the newly created comments of a post to database
