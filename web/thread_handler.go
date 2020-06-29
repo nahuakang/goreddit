@@ -20,6 +20,7 @@ type ThreadHandler struct {
 // List returns a webpage with the list of all Threads
 func (h *ThreadHandler) List() http.HandlerFunc {
 	type data struct {
+		SessionData
 		Threads []goreddit.Thread
 	}
 
@@ -31,19 +32,24 @@ func (h *ThreadHandler) List() http.HandlerFunc {
 			return
 		}
 
-		tmpl.Execute(w, data{Threads: tt})
+		tmpl.Execute(w, data{
+			SessionData: GetSessionData(r.Context(), h.sessions),
+			Threads:     tt,
+		})
 	}
 }
 
 // Create leads to the page for creating new threads
 func (h *ThreadHandler) Create() http.HandlerFunc {
 	type data struct {
+		SessionData
 		CSRF template.HTML
 	}
 	tmpl := template.Must(template.ParseFiles("templates/layout.html", "templates/thread_create.html"))
 	return func(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, data{
-			CSRF: csrf.TemplateField(r),
+			SessionData: GetSessionData(r.Context(), h.sessions),
+			CSRF:        csrf.TemplateField(r),
 		})
 	}
 }
@@ -51,6 +57,7 @@ func (h *ThreadHandler) Create() http.HandlerFunc {
 // Show shows all the threads
 func (h *ThreadHandler) Show() http.HandlerFunc {
 	type data struct {
+		SessionData
 		CSRF   template.HTML
 		Thread goreddit.Thread
 		Posts  []goreddit.Post
@@ -79,9 +86,10 @@ func (h *ThreadHandler) Show() http.HandlerFunc {
 		}
 
 		tmpl.Execute(w, data{
-			CSRF:   csrf.TemplateField(r),
-			Thread: t,
-			Posts:  pp,
+			SessionData: GetSessionData(r.Context(), h.sessions),
+			CSRF:        csrf.TemplateField(r),
+			Thread:      t,
+			Posts:       pp,
 		})
 	}
 }

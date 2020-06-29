@@ -58,6 +58,7 @@ type Handler struct {
 // Home leads to the homepage
 func (h *Handler) Home() http.HandlerFunc {
 	type data struct {
+		SessionData
 		Posts []goreddit.Post
 	}
 	tmpl := template.Must(template.ParseFiles("templates/layout.html", "templates/home.html"))
@@ -67,6 +68,9 @@ func (h *Handler) Home() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		tmpl.Execute(w, data{Posts: pp})
+		tmpl.Execute(w, data{
+			SessionData: GetSessionData(r.Context(), h.sessions),
+			Posts:       pp,
+		})
 	}
 }
