@@ -79,6 +79,8 @@ func (h *PostHandler) Store() http.HandlerFunc {
 			return
 		}
 
+		h.sessions.Put(r.Context(), "flash", "Your post has been created.")
+
 		http.Redirect(w, r, "/threads/"+t.ID.String()+"/"+p.ID.String(), http.StatusFound)
 	}
 }

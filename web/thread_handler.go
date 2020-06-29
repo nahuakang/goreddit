@@ -109,6 +109,8 @@ func (h *ThreadHandler) Store() http.HandlerFunc {
 			return
 		}
 
+		h.sessions.Put(r.Context(), "flash", "Your new thread has been created.")
+
 		http.Redirect(w, r, "/threads", http.StatusFound)
 	}
 }
@@ -128,6 +130,8 @@ func (h *ThreadHandler) Delete() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		h.sessions.Put(r.Context(), "flash", "Your thread has been deleted.")
 
 		http.Redirect(w, r, "/threads", http.StatusFound)
 	}

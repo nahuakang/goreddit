@@ -61,6 +61,7 @@ func (h *Handler) Home() http.HandlerFunc {
 		SessionData
 		Posts []goreddit.Post
 	}
+
 	tmpl := template.Must(template.ParseFiles("templates/layout.html", "templates/home.html"))
 	return func(w http.ResponseWriter, r *http.Request) {
 		pp, err := h.store.Posts()
@@ -68,6 +69,7 @@ func (h *Handler) Home() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
 		tmpl.Execute(w, data{
 			SessionData: GetSessionData(r.Context(), h.sessions),
 			Posts:       pp,
