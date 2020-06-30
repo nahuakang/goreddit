@@ -1,5 +1,12 @@
 package web
 
+import "encoding/gob"
+
+func init() {
+	gob.Register(CreatePostForm{})
+	gob.Register(FormErrors{})
+}
+
 // FormErrors store errors for validating forms
 type FormErrors map[string]string
 
