@@ -11,7 +11,8 @@ import (
 // SessionData contains data for flash messages
 type SessionData struct {
 	FlashMessage string
-	// UserID uuid.UUID
+	Form         interface{} // So that it works with any kind of forms
+	// UserID uuid.UUID3
 }
 
 // NewSessionManager manages sessions for Goreddit
@@ -33,6 +34,11 @@ func GetSessionData(ctx context.Context, session *scs.SessionManager) SessionDat
 
 	data.FlashMessage = session.PopString(ctx, "flash")
 	// data.UserID, _ = session.Get(ctx, "user_id").(uuid.UUID)
+
+	data.Form = session.Pop(ctx, "form")
+	if data.Form == nil {
+		data.Form = map[string]string{}
+	}
 
 	return data
 }
