@@ -18,7 +18,7 @@
     <div class="form-group">
         <label>Text</label>
         <textarea name="content" class="form-control" rows="3" placeholder="Tell people about your thoughts">
-            {{with .Form.Content}} {{.}} {{end}}
+            {{- with .Form.Content}} {{.}} {{end -}}
         </textarea>
         {{with .Form.Errors.Content}}
         {{.}}
