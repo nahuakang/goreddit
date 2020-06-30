@@ -9,15 +9,16 @@
 
     <div class="form-group">
         <label>Title</label>
-        <input name="title" type="text" class="form-control" placeholder="Give your post a great title">
+        <input name="title" type="text" class="form-control" placeholder="Give your post a great title"
+        value="{{with .Form.Title}} {{.}} {{end}}">
         {{with .Form.Errors.Title}}
         {{.}}
         {{end}}
     </div>
     <div class="form-group">
         <label>Text</label>
-        <textarea name="content" class="form-control" rows="3"
-            placeholder="Tell people about your thoughts">
+        <textarea name="content" class="form-control" rows="3" placeholder="Tell people about your thoughts">
+            {{with .Form.Content}} {{.}} {{end}}
         </textarea>
         {{with .Form.Errors.Content}}
         {{.}}
